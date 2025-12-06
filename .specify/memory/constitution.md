@@ -1,55 +1,96 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Console Todo Application Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Code Quality
+All code must follow Python best practices and PEP 8 standards. Every function and method must include proper type hints. All classes and public methods must have clear docstrings. Code must be readable, maintainable, and follow clean code principles.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Object-Oriented Design
+Use proper OOP principles including encapsulation, single responsibility, and inheritance where appropriate. Clear separation of concerns between data models, business logic, and UI layers is mandatory. Each class should have a single, well-defined purpose.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-Driven Development (TDD) - NON-NEGOTIABLE
+TDD is mandatory for all features. Follow the Red-Green-Refactor cycle strictly:
+1. **Red**: Write a failing test first that defines desired behavior
+2. **Green**: Implement minimum code to make the test pass
+3. **Refactor**: Improve code quality while keeping tests green
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+All code must be unit testable with clear interfaces. Design with testability as a primary concern - loosely coupled components, dependency injection where appropriate, and well-defined interfaces between layers.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### IV. User Experience
+Console interface must be intuitive and provide clear feedback. User prompts must be descriptive and guide the user. Console output must be clear and formatted. All user operations must provide immediate, understandable feedback.
 
-### [PRINCIPLE_6_NAME]
+### V. Data Integrity
+In-memory storage must maintain data consistency during runtime. Operations must be atomic where appropriate. Edge cases must be handled gracefully. No data corruption or inconsistent states allowed during runtime session.
 
+### VI. Error Handling & Validation
+All user inputs must be validated before processing. All user inputs and operations must have proper error handling. Error messages must be clear and actionable. No unhandled exceptions should reach the user.
 
-[PRINCIPLE__DESCRIPTION]
+## Development Standards
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Technology Stack
+- **Python Version**: Python 3.13+ required
+- **Package Manager**: Use `uv` exclusively for all package management and project initialization
+- **Project Structure**: Must be initialized with `uv init --package console-todo-app`
+- **Testing Framework**: Use pytest for all unit tests
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### TDD Workflow
+- **Red-Green-Refactor**: Mandatory cycle for all features
+- **Test First**: Write failing tests before any implementation code
+- **Test Coverage**: Aim for high test coverage of business logic, models, and core functionality
+- **Test Organization**: Tests should mirror source structure; clear, descriptive test names
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Code Standards
+- **Type Hints**: Required for all functions and methods
+- **Code Formatting**: All code must be properly formatted with ruff
+- **Docstrings**: Required for all classes and public methods
+- **Naming Conventions**: snake_case for functions/variables, PascalCase for classes
+- **Style Guide**: Follow PEP 8 strictly
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Architecture Principles
+- **Separation of Concerns**: Clear separation between data models, business logic, and UI layers
+- **Minimal Dependencies**: Use standard library where possible; minimize external dependencies
+- **No Hardcoding**: Use configuration where appropriate; no hardcoded values
+- **Modularity**: Code must be modular and follow OOP principles
+
+## Technical Constraints
+
+### Storage & Platform
+- **Storage**: In-memory only (no database or file persistence in Phase I)
+- **Platform**: Must run on Linux (WSL 2), macOS, and native Linux
+- **Dependencies**: Minimal external dependencies; pytest for testing, prefer standard library otherwise
+- **TDD Workflow**: Write failing tests first, implement to pass, refactor for quality
+
+### Quality Gates
+All code must pass the following before being considered complete:
+- ✓ All unit tests pass (pytest)
+- ✓ All code has corresponding unit tests (TDD requirement)
+- ✓ High test coverage for models and business logic
+- ✓ Type checking with mypy
+- ✓ Code formatting with ruff
+- ✓ Proper error handling for all functions
+- ✓ Input validation for all user inputs
+- ✓ Edge cases handled gracefully
+- ✓ Application runs without errors on Python 3.13+
+
+## Success Criteria
+
+### Functional Requirements
+- All user operations work as specified (Add, Delete, Update, View, Mark Complete)
+- Data persists correctly during runtime session
+- Application runs without errors on Python 3.13+
+- All unit tests pass (pytest)
+
+### Code Quality Requirements
+- Code is modular and follows OOP principles
+- User interface is intuitive and provides feedback
+- TDD cycle (Red-Green-Refactor) was followed for all features
+- High test coverage for core functionality
+- All quality gates pass
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution supersedes all other practices and applies to ALL features in Phase I: Basic Level (Add, Delete, Update, View, Mark Complete tasks).
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+All development must verify compliance with these principles. Any deviation must be documented and justified. Complexity must be justified and aligned with project goals.
+
+**Version**: 1.1.0 | **Ratified**: 2025-12-06 | **Last Amended**: 2025-12-06
