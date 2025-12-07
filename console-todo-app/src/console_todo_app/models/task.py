@@ -52,7 +52,7 @@ class Task:
 
     def __str__(self) -> str:
         """Return readable string representation of task."""
-        status = "✓" if self.is_complete else "○"
+        status = "[OK]" if self.is_complete else "[ ]"
         return f"{self.id} | {self.title} | {status} | {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
     def __repr__(self) -> str:

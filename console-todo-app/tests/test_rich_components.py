@@ -104,7 +104,7 @@ class TestRichMessageFormatter:
         msg = formatter.success("Task created")
         assert msg is not None
         assert isinstance(msg, str)
-        assert "✓" in msg
+        assert "[OK]" in msg
 
     def test_success_message_contains_green(self):
         """Test success message contains green color markup."""
@@ -118,7 +118,7 @@ class TestRichMessageFormatter:
         msg = formatter.error("Task not found")
         assert msg is not None
         assert isinstance(msg, str)
-        assert "✗" in msg
+        assert "[X]" in msg
 
     def test_error_message_contains_red(self):
         """Test error message contains red color markup."""
@@ -132,7 +132,7 @@ class TestRichMessageFormatter:
         msg = formatter.info("Please confirm")
         assert msg is not None
         assert isinstance(msg, str)
-        assert "ℹ" in msg
+        assert "[i]" in msg
 
     def test_info_message_contains_blue(self):
         """Test info message contains blue color markup."""

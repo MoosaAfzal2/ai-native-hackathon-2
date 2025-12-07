@@ -39,27 +39,27 @@ class TestThemeSymbols:
     def test_theme_symbol_success(self):
         """Test SUCCESS symbol is defined correctly."""
         assert hasattr(Theme, 'SYMBOL_SUCCESS')
-        assert Theme.SYMBOL_SUCCESS == "✓"
+        assert Theme.SYMBOL_SUCCESS == "[OK]"
 
     def test_theme_symbol_error(self):
         """Test ERROR symbol is defined correctly."""
         assert hasattr(Theme, 'SYMBOL_ERROR')
-        assert Theme.SYMBOL_ERROR == "✗"
+        assert Theme.SYMBOL_ERROR == "[X]"
 
     def test_theme_symbol_info(self):
         """Test INFO symbol is defined correctly."""
         assert hasattr(Theme, 'SYMBOL_INFO')
-        assert Theme.SYMBOL_INFO == "ℹ"
+        assert Theme.SYMBOL_INFO == "[i]"
 
     def test_theme_symbol_complete(self):
         """Test COMPLETE symbol is defined correctly."""
         assert hasattr(Theme, 'SYMBOL_COMPLETE')
-        assert Theme.SYMBOL_COMPLETE == "✓"
+        assert Theme.SYMBOL_COMPLETE == "[OK]"
 
     def test_theme_symbol_incomplete(self):
         """Test INCOMPLETE symbol is defined correctly."""
         assert hasattr(Theme, 'SYMBOL_INCOMPLETE')
-        assert Theme.SYMBOL_INCOMPLETE == "○"
+        assert Theme.SYMBOL_INCOMPLETE == "[ ]"
 
 
 class TestThemeTableStyling:
@@ -78,7 +78,7 @@ class TestThemeTableStyling:
     def test_theme_table_title(self):
         """Test TABLE_TITLE is defined correctly."""
         assert hasattr(Theme, 'TABLE_TITLE')
-        assert Theme.TABLE_TITLE == "📋 Your Tasks"
+        assert Theme.TABLE_TITLE == "[Tasks]"
 
     def test_theme_table_show_lines(self):
         """Test TABLE_SHOW_LINES is defined correctly."""
@@ -131,4 +131,4 @@ class TestDefaultTheme:
 
     def test_default_theme_has_symbols(self):
         """Test default_theme can access symbols."""
-        assert default_theme.SYMBOL_SUCCESS == "✓"
+        assert default_theme.SYMBOL_SUCCESS == "[OK]"

@@ -36,16 +36,16 @@ class Theme:
     MUTED: str = "dim white"
 
     # Symbols
-    SYMBOL_SUCCESS: str = "✓"
-    SYMBOL_ERROR: str = "✗"
-    SYMBOL_INFO: str = "ℹ"
-    SYMBOL_COMPLETE: str = "✓"
-    SYMBOL_INCOMPLETE: str = "○"
+    SYMBOL_SUCCESS: str = "[OK]"
+    SYMBOL_ERROR: str = "[X]"
+    SYMBOL_INFO: str = "[i]"
+    SYMBOL_COMPLETE: str = "[OK]"
+    SYMBOL_INCOMPLETE: str = "[ ]"
 
     # Table styling
     TABLE_BORDER_STYLE: str = "blue"
     TABLE_HEADER_STYLE: str = "bold blue"
-    TABLE_TITLE: str = "📋 Your Tasks"
+    TABLE_TITLE: str = "[Tasks]"
     TABLE_SHOW_LINES: bool = True
 
     # Menu styling

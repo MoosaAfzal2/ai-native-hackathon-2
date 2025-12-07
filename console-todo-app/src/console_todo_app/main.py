@@ -2,6 +2,7 @@
 
 from console_todo_app.storage.task_storage import TaskStorage
 from console_todo_app.ui.console_ui import ConsoleUI
+from console_todo_app.ui.rich_components import RichMenuBuilder, get_console
 
 
 class TodoApp:
@@ -11,19 +12,14 @@ class TodoApp:
         """Initialize TodoApp with storage and UI."""
         self.storage = TaskStorage()
         self.ui = ConsoleUI(self.storage)
+        self.menu_builder = RichMenuBuilder()
+        self.console = get_console()
 
     def display_menu(self) -> None:
         """Display the main menu options."""
-        print("\n" + "=" * 70)
-        print("CONSOLE TODO APPLICATION")
-        print("=" * 70)
-        print("1. Add a new task")
-        print("2. View all tasks")
-        print("3. Update a task")
-        print("4. Delete a task")
-        print("5. Mark task complete/incomplete")
-        print("6. Exit")
-        print("=" * 70)
+        menu_panels = self.menu_builder.build_menu()
+        for panel in menu_panels:
+            self.console.print(panel)
 
     def run_event_loop(self) -> None:
         """Run the main event loop."""
@@ -46,14 +42,14 @@ class TodoApp:
             elif choice == "5":
                 self.ui.prompt_toggle_task_status()
             elif choice == "6":
-                print("\nThank you for using Console Todo App. Goodbye!")
+                self.console.print("\nThank you for using Console Todo App. Goodbye!")
                 break
             else:
-                print("Invalid choice. Please enter a number between 1 and 6.")
+                self.console.print("[red]Invalid choice. Please enter a number between 1 and 6.[/]")
 
     def run(self) -> None:
         """Start the application."""
-        print("\nWelcome to Console Todo App!")
+        self.console.print("\n[blue]Welcome to Console Todo App![/]")
         self.run_event_loop()
 
 
@@ -65,3 +61,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
