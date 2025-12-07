@@ -52,7 +52,34 @@ class RichTableBuilder:
         Returns:
             Rich Table configured with task data and styling.
         """
-        pass
+        table = Table(
+            title=self.theme.TABLE_TITLE,
+            border_style=self.theme.TABLE_BORDER_STYLE,
+            header_style=self.theme.TABLE_HEADER_STYLE,
+            show_lines=self.theme.TABLE_SHOW_LINES,
+        )
+
+        # Add columns
+        table.add_column("ID", style="cyan", justify="right", width=4)
+        table.add_column("Title", style="white", width=40)
+        table.add_column("Status", justify="center", width=12)
+        table.add_column("Created", style="dim", width=16)
+
+        # Add rows
+        for task in tasks:
+            status = (
+                f"[{self.theme.SUCCESS}]{self.theme.SYMBOL_COMPLETE}[/] Complete"
+                if task.is_complete
+                else f"[{self.theme.WARNING}]{self.theme.SYMBOL_INCOMPLETE}[/] Pending"
+            )
+            table.add_row(
+                str(task.id),
+                task.title,
+                status,
+                task.created_at.strftime("%Y-%m-%d %H:%M"),
+            )
+
+        return table
 
     def build_empty_state_table(self) -> Panel:
         """Build a styled panel for empty task list.
@@ -60,7 +87,12 @@ class RichTableBuilder:
         Returns:
             Rich Panel with empty state message.
         """
-        pass
+        return Panel(
+            "[yellow]No tasks found[/]",
+            border_style=self.theme.TABLE_BORDER_STYLE,
+            title="Tasks",
+            expand=False,
+        )
 
 
 class RichMessageFormatter:
@@ -87,7 +119,7 @@ class RichMessageFormatter:
         Returns:
             Rich markup formatted string ready for console output.
         """
-        pass
+        return f"[{self.theme.SUCCESS}]{self.theme.SYMBOL_SUCCESS}[/] {message}"
 
     def error(self, message: str) -> str:
         """Format an error message with red color and X mark.
@@ -98,7 +130,7 @@ class RichMessageFormatter:
         Returns:
             Rich markup formatted string ready for console output.
         """
-        pass
+        return f"[{self.theme.ERROR}]{self.theme.SYMBOL_ERROR}[/] {message}"
 
     def info(self, message: str) -> str:
         """Format an info message with blue color and info symbol.
@@ -109,7 +141,7 @@ class RichMessageFormatter:
         Returns:
             Rich markup formatted string ready for console output.
         """
-        pass
+        return f"[{self.theme.PRIMARY}]{self.theme.SYMBOL_INFO}[/] {message}"
 
 
 class RichMenuBuilder:
@@ -133,7 +165,37 @@ class RichMenuBuilder:
         Returns:
             Panel or list of Panels with menu structure.
         """
-        pass
+        from rich.text import Text
+
+        # Create title panel
+        title_panel = Panel(
+            f"[{self.theme.MENU_TITLE_STYLE}]{self.theme.MENU_TITLE_TEXT}[/]",
+            border_style=self.theme.MENU_BORDER_STYLE,
+            padding=(0, 2),
+        )
+
+        # Create options panel
+        options_text = Text()
+        options = [
+            "1. Add a new task",
+            "2. View all tasks",
+            "3. Update a task",
+            "4. Delete a task",
+            "5. Mark task complete/incomplete",
+            "6. Exit",
+        ]
+        for i, option in enumerate(options):
+            if i > 0:
+                options_text.append("\n")
+            options_text.append(option)
+
+        options_panel = Panel(
+            options_text,
+            border_style=self.theme.MENU_BORDER_STYLE,
+            padding=(1, 2),
+        )
+
+        return [title_panel, options_panel]
 
 
 class RichPromptHelper:
@@ -173,7 +235,20 @@ class RichPromptHelper:
         Raises:
             ValueError: If max_length validation fails.
         """
-        pass
+        from rich.prompt import Prompt
+
+        while True:
+            result = Prompt.ask(
+                f"[{self.theme.PROMPT_STYLE}]{prompt}[/]",
+                console=self.console,
+            )
+            if max_length and len(result) > max_length:
+                error_msg = self.error(
+                    f"Text too long (max {max_length}). Current: {len(result)}"
+                )
+                self.console.print(error_msg)
+                continue
+            return result
 
     def prompt_integer(self, prompt: str) -> int:
         """Prompt for integer input with error handling.
@@ -187,7 +262,17 @@ class RichPromptHelper:
         Raises:
             ValueError: If input is not a valid integer.
         """
-        pass
+        from rich.prompt import IntPrompt
+
+        while True:
+            try:
+                return IntPrompt.ask(
+                    f"[{self.theme.PROMPT_STYLE}]{prompt}[/]",
+                    console=self.console,
+                )
+            except ValueError:
+                error_msg = self.error("Please enter a valid number")
+                self.console.print(error_msg)
 
     def prompt_confirmation(self, prompt: str) -> bool:
         """Prompt for yes/no confirmation.
@@ -198,4 +283,20 @@ class RichPromptHelper:
         Returns:
             True if user confirms, False otherwise.
         """
-        pass
+        from rich.prompt import Confirm
+
+        return Confirm.ask(
+            f"[{self.theme.PROMPT_STYLE}]{prompt}[/]",
+            console=self.console,
+        )
+
+    def error(self, message: str) -> str:
+        """Format error message (helper method).
+
+        Args:
+            message: Error message text.
+
+        Returns:
+            Formatted error message.
+        """
+        return f"[{self.theme.ERROR}]{self.theme.SYMBOL_ERROR}[/] {message}"
