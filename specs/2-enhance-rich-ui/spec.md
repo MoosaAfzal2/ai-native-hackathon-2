@@ -138,13 +138,100 @@ As a user viewing tasks, I want completion status indicators to use visual badge
 - **SC-009**: Rich library is the only new dependency added (no additional packages required)
 - **SC-010**: README is updated with Rich library installation and usage instructions
 
+## Clarifications & Design Decisions
+
+### Table Styling
+**Decision**: Standard (medium styling) with visible borders, grid lines between rows, and standard padding.
+- **Border Style**: Thin borders (box style) with grid lines for row separation
+- **Padding**: 1 cell on each side for comfortable readability
+- **Header**: Distinct styling to separate from data rows
+- **Implementation**: Use Rich's default or "box.ROUNDED" for rounded corners
+
+### Color Configuration
+**Decision**: All colors are hardcoded in code.
+- **Rationale**: Faster implementation, simpler testing, ensures consistent visual identity
+- **Color Mapping**:
+  - Success: Green (#00AA00 or Rich "green")
+  - Error: Red (#CC0000 or Rich "red")
+  - Info/Warning: Blue (#0066CC or Rich "blue")
+  - Incomplete tasks: Yellow (#FFAA00 or Rich "yellow")
+  - Complete tasks: Green (#00AA00 or Rich "green")
+  - Headers/Titles: Blue for primary branding
+
+### Error Display Strategy
+**Decision**: Inline with Rich Prompt using built-in validation.
+- **Implementation**: Use Rich.Prompt with validation callback functions
+- **Behavior**: When user provides invalid input, error message appears inline below the prompt before asking again
+- **For non-Prompt errors**: Use styled Rich Console.print() with red color and ✗ symbol
+- **Validation Examples**:
+  - Empty title: Re-prompt with "Title cannot be empty" error
+  - Length exceeded: Show "Title too long (max 200). Current: X characters"
+
+### Terminal Compatibility (Fallback)
+**Decision**: Automatic fallback - Rich detects terminal capabilities and adapts rendering.
+- **Behavior**:
+  - On modern terminals: Full color, tables, unicode symbols
+  - On limited terminals: ASCII-only rendering, no colors
+  - Rich library handles all detection automatically
+- **No Code for Fallback**: Let Rich handle it; no explicit NO_RICH or --classic mode
+- **Testing**: Test on both color and non-color terminal environments
+
+### Testing Strategy
+**Decision**: Use Rich's built-in testing utilities to verify rendered output.
+- **Approach**:
+  - Capture Rich Console output using `Console.capture()` or Rich's test utilities
+  - Verify that correct formatting codes and styling are applied
+  - Test actual rendered output, not just data passed to components
+  - Maintain existing mocks for non-Rich code (input/output simulation)
+- **Test Categories**:
+  - Unit tests for business logic (unchanged)
+  - Integration tests for Rich component rendering
+  - Visual regression tests (capture expected vs. actual output)
+
+### Unicode/Emoji Handling
+**Decision**: Unicode with Rich's automatic degradation.
+- **Symbols**:
+  - Complete task: ✓ (U+2713)
+  - Incomplete task: ○ (U+25CB)
+  - Info message: ℹ (U+2139)
+  - Success prefix: ✓ (U+2713)
+  - Error prefix: ✗ (U+2717)
+- **Fallback**: Rich automatically falls back to ASCII equivalents on unsupported terminals
+- **No Code Changes**: Let Rich handle terminal detection; no explicit fallback logic needed
+
+### Import Strategy
+**Decision**: Import Rich at startup, creating a singleton Console instance.
+- **Location**: In `ui/__init__.py` or `ui/console_ui.py` at module level
+- **Implementation**:
+  ```python
+  from rich.console import Console
+  console = Console()
+  ```
+- **Rationale**:
+  - Faster application startup (imports happen once)
+  - Simple memory usage (one Console instance for entire app)
+  - Easier testing (single point to mock if needed)
+  - All UI components use the same console instance for consistency
+
+### Menu Structure
+**Decision**: Multiple Panels for visual separation.
+- **Structure**:
+  - **Panel 1** (Title): Contains "TODO APPLICATION" title only
+  - **Panel 2** (Menu Options): Contains the 6 numbered options (1-6)
+  - **Panel 3** (Footer): Contains additional help text or instructions
+- **Styling**:
+  - Title panel: Blue borders with centered title
+  - Options panel: Standard borders with left-aligned options
+  - Footer panel: Optional, can be omitted if space is tight
+- **Spacing**: One blank line between panels for clarity
+
 ## Assumptions
 
 - **Rich Library Compatibility**: The Rich library (latest stable) is compatible with Python 3.12+ and works on Windows, macOS, and Linux
 - **Backward Compatibility**: All existing functionality remains unchanged; Rich is used only for presentation
-- **Terminal Capabilities**: While Rich gracefully degrades in non-color terminals, we assume modern terminals support color output
+- **Terminal Capabilities**: Rich's automatic fallback handles both color and non-color terminals
 - **No Persistence Changes**: Data storage and retrieval remain unchanged; Rich is purely a UI layer change
-- **Testing Approach**: Existing tests mock `print()` and Rich Console; new tests verify Rich component integration
+- **Testing Approach**: Use Rich's testing utilities to verify rendered output; existing tests mock `print()` statements
 - **Architecture Unchanged**: 4-layer architecture (Models, Storage, UI, Main) remains; only UI layer is enhanced
 - **User Expectations**: Users expect improved visual presentation without changes to how they interact with the application
 
